@@ -1,0 +1,108 @@
+<div style={{ textAlign: 'left' }}>
+
+# Creating a Planning Poker app
+
+<br />
+<a
+  style={{ color: "cornflowerblue" }}
+  href="https://ep-planning-poker.fly.dev/"
+  target="_blank"
+>
+  https://ep-planning-poker.fly.dev/
+</a>
+
+Remix (Node.js / React)<br/>
+TypeScript<br/>
+WebSockets
+
+</div>
+
+---
+
+<div style={{ textAlign: 'left' }}>
+
+# Server side
+
+Each message from a connected client is broadcast to every connected client.
+
+```javascript
+const wss = new Server({ server });
+
+wss.on("connection", (ws) => {
+  ws.on("message", (message) => {
+    console.log("Received message:\n\t %s", message);
+
+    wss.clients.forEach(function each(client) {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message, { binary: false });
+      }
+    });
+  });
+});
+```
+
+</div>
+
+---
+
+<div style={{ textAlign: 'left' }}>
+
+# Client side
+
+Set event handlers for connecting to the socket, receiving messages and leaving the room.
+
+Message processing:
+
+- add/remove players
+- update player estimates
+- show estimates
+- reset the board
+- update spectator status
+
+</div>
+
+---
+
+<div style={{ textAlign: 'left' }}>
+
+# What could be improved
+
+- Break up the room logic
+- Use a state machine to manage room state permutations
+- Add automated tests
+- Use `localStorage` to store player IDs rather than `sessionStorage`
+- Move some message validation from the client to the server
+  - Only send messages to their respective rooms
+  - Don't allow players to send messages to themselves
+
+</div>
+
+---
+
+<div style={{ textAlign: 'left' }}>
+
+# Lessons learned
+
+- Hosting matters, especially on a budget
+- WebSockets disconnect after 60s of idle time
+- Not too many Remix learnings
+
+</div>
+
+---
+
+<div style={{ textAlign: 'left' }}>
+
+# Open source
+
+<a
+  style={{ color: "cornflowerblue" }}
+  href="https://github.com/sean-beard/planning-poker"
+  target="_blank"
+>
+  https://github.com/sean-beard/planning-poker
+</a>
+
+PRs, issues, feature requests welcome
+
+</div>
